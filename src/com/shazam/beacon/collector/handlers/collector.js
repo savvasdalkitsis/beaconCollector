@@ -5,12 +5,25 @@ var pathRegex = /\/collect(\/(.*))*$/;
 
 function handle(request, response) {
     console.log("Collecting beacon");
-    respondWith.ok(response);
+    var identifier = identifierFrom(request);
+    if (identifier) {
+        respondWith.okMessage(response, identifier);
+    } else {
+        respondWith.textPlain(response, 400, "Client should supply a beacon identifier");
+    }
+}
+
+function identifierFrom(request) {
+    var match = pathRegex.exec(path(request));
+    var identifier = null;
+    if (match) {
+        identifier = match[2];
+    }
+    return identifier;
 }
 
 function shouldHandle(request) {
-    var pathName = path(request);
-    return pathRegex.test(pathName);
+    return pathRegex.test(path(request));
 }
 
 function getHandlerName() {

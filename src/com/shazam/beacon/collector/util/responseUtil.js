@@ -5,7 +5,11 @@ function textPlain(response, responseCode, responseMessage) {
 }
 
 function ok(response) {
-    textPlain(response, 200, "OK");
+    okMessage(response, "OK");
+}
+
+function okMessage(response, message) {
+    textPlain(response, 200, message);
 }
 
 function notFound(response) {
@@ -14,4 +18,5 @@ function notFound(response) {
 
 exports.textPlain = textPlain;
 exports.ok = ok;
+exports.okMessage = okMessage;
 exports.notFound = notFound;
