@@ -1,4 +1,4 @@
-var respondWith = require("../util/responseUtil.js")
+var respondWith = require("../../util/responseUtil.js")
 var url = require("url");
 
 function handle(request, response) {
