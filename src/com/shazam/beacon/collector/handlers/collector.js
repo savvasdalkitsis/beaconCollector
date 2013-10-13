@@ -1,24 +1,19 @@
-var respondWith = require("../../util/responseUtil.js")
+var respondWith = require("../util/responseUtil.js")
 var url = require("url");
-var gatherFor = require("./gatherFor.js")
+var gatherer = require("./gatherer.js")
 
 function handle(request, response) {
     console.log("Collecting beacon");
     var identifier = identifierFrom(request);
     if (identifier) {
         var parameters = params(request);
-        try {
-            gatherFor.gather(identifier, parameters);
-            respondWith.okMessage(response, "Saved " + parameters + " for id" + identifier);
-        } catch (err) {
-            console.error(err);
-            var error = "Could not save parameters " + parameters + " for id " + identifier + "\nReason: " + err.toString();
-            respondWith.textPlain(response, 500, error)
-        }
+        gatherer.gather(identifier, parameters);
+        respondWith.okMessage(response, "Saved " + parameters + " for id" + identifier);
     } else {
         respondWith.textPlain(response, 400, "Client should supply a beacon identifier");
     }
 }
+
 function identifierFrom(request) {
     return path(request)[2];
 }
@@ -28,8 +23,7 @@ function params(request) {
 }
 
 function shouldHandle(request) {
-    var firstSegment = path(request)[1];
-    return "collect" === firstSegment;
+    return "collect" === path(request)[1];
 }
 
 function getHandlerName() {

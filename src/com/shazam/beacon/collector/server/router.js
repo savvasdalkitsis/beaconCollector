@@ -15,7 +15,7 @@ function route(request, response) {
             try {
                 handler.handle(request, response);
             } catch (err) {
-                console.error(err);
+                console.error(err.stack);
                 responseUtil.textPlain(response, 500, err.toString());
             }
             handled = true;
