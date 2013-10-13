@@ -1,7 +1,6 @@
 var respondWith = require("../util/responseUtil.js")
 var url = require("url");
 
-var pathRegex = /\/collect(\/(.*))*$/;
 
 function handle(request, response) {
     console.log("Collecting beacon");
@@ -14,16 +13,12 @@ function handle(request, response) {
 }
 
 function identifierFrom(request) {
-    var match = pathRegex.exec(path(request));
-    var identifier = null;
-    if (match) {
-        identifier = match[2];
-    }
-    return identifier;
+    return path(request)[2];
 }
 
 function shouldHandle(request) {
-    return pathRegex.test(path(request));
+    var firstSegment = path(request)[1];
+    return "collect" === firstSegment;
 }
 
 function getHandlerName() {
@@ -31,7 +26,7 @@ function getHandlerName() {
 }
 
 function path(request) {
-    return url.parse(request.url).pathname;
+    return url.parse(request.url).pathname.split("/");
 }
 
 exports.handle = handle;
