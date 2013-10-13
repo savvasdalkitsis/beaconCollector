@@ -12,7 +12,12 @@ function route(request, response) {
     requestHandlers.forEach(function(handler) {
         if (!handled && handler.shouldHandle(request)) {
             console.log("Routing to handler: " + handler.getHandlerName());
-            handler.handle(request, response);
+            try {
+                handler.handle(request, response);
+            } catch (err) {
+                console.error(err);
+                responseUtil.textPlain(response, 500, err.toString());
+            }
             handled = true;
         }
     });
